@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:inshorts_task/Core/Common/movie_card.dart';
 import 'package:inshorts_task/Core/Contants/app_dimensions.dart';
-import 'package:inshorts_task/Core/Contants/app_routes.dart';
 
-class BookMarkScreen extends StatelessWidget {
-  const BookMarkScreen({super.key});
+class TrendingScreen extends StatelessWidget {
+  const TrendingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +14,13 @@ class BookMarkScreen extends StatelessWidget {
         child: GridView.builder(
           padding: EdgeInsets.zero,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
+            crossAxisCount: 2,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
           ),
           itemCount: 30,
           itemBuilder: (context, index) {
-            return MovieCard(
-              onTapOfMovieCard: (){
-                Navigator.pushNamed(context, AppRoutes.movieDetailsScreen);
-              },
-            );
+            return MovieCard();
           },
         ),
       ),
