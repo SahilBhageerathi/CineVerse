@@ -1,9 +1,11 @@
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inshorts_task/Core/Contants/app_dimensions.dart';
 import 'package:inshorts_task/Core/Contants/app_routes.dart';
 import 'package:inshorts_task/Core/Contants/app_strings.dart';
+import 'package:inshorts_task/Core/Contants/global.dart';
 import 'package:inshorts_task/Presentation/Bloc/Home/home_bloc.dart';
 import 'package:inshorts_task/Presentation/Screens/book_mark_screen.dart';
 import 'package:inshorts_task/Presentation/Screens/trending_screen.dart';
@@ -28,6 +30,24 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     context.read<HomeBloc>().add(InitializeHomePage());
+    Future.sync(() async {
+      AppLinks appLinks = AppLinks();
+      final uri = await appLinks.getInitialLink();
+      if (uri != null) {
+        if (uri.host == "www.cineverse.com" && uri.pathSegments.isNotEmpty) {
+          if (uri.pathSegments.first == "movie") {
+            final movieId = int.tryParse(uri.queryParameters["id"] ?? "");
+            if (movieId != null && mounted && !context.read<HomeBloc>().state.comingBackFromDetailsPage) {
+              GlobalConstant.navigatorKey.currentState?.pushNamed(
+                AppRoutes.movieDetailsScreen,
+                arguments: movieId,
+              );
+            }
+          }
+        }
+      }
+    });
+
     _tabController = TabController(length: tabs.length, vsync: this);
   }
 

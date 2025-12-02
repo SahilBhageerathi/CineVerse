@@ -21,3 +21,18 @@ class OnSearchChanged extends HomeEvent {
   String query;
   OnSearchChanged(this.query);
 }
+
+class GetMovieEvent extends HomeEvent{
+  int id;
+  GetMovieEvent(this.id);
+}
+
+class OpenDetailsPageFromDeepLink extends HomeEvent{
+  bool val;
+  OpenDetailsPageFromDeepLink(this.val);
+}
+
+class ShareMovieEvent extends HomeEvent{
+  String url;
+  ShareMovieEvent(this.url);
+}

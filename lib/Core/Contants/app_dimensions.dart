@@ -11,5 +11,6 @@ class AppDimensions {
 
   static const double defaultMovieCardHeight = 300;
   static const double defaultMovieCardWidth = 150;
+  static const double splashIconSize = 50;
 
 }
