@@ -44,3 +44,26 @@ flutter pub get
 flutter packages pub run build_runner build --delete-conflicting-outputs
 flutter run
 
+⚠️ Important Notes
+
+🌍 TMDB API Availability in India
+The TMDB API is restricted in India by multiple ISPs.
+Because of this, the application will not work on Indian mobile networks unless you use a VPN.
+👉 To run this app successfully on real devices in India:
+Connect to a VPN (USA / UK / Singapore recommended)
+Then open the app
+The app works normally without VPN on most office Wi-Fi and international networks
+
+
+🔗 Deep Linking Instructions
+
+The application supports deep links for opening movie detail pages directly.
+However, for Android to allow deep links from the browser or shared links automatically, you must manually enable supported links for the app:
+
+App Info -> Open by default -> Add Link -> Allow "www.cineverse.com"
+
+
+
+
+
+
