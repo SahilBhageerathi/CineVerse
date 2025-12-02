@@ -8,6 +8,7 @@ import 'package:inshorts_task/Core/Contants/app_strings.dart';
 import 'package:inshorts_task/Core/Contants/global.dart';
 import 'package:inshorts_task/Presentation/Bloc/Home/home_bloc.dart';
 import 'package:inshorts_task/Presentation/Screens/book_mark_screen.dart';
+import 'package:inshorts_task/Presentation/Screens/search_screen.dart';
 import 'package:inshorts_task/Presentation/Screens/trending_screen.dart';
 import 'package:inshorts_task/resources/colors/app_colors.dart';
 
@@ -23,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   final List<Tab> tabs = [
     Tab(icon: Icon(Icons.home), text: AppStrings.homeText),
+    Tab(icon: Icon(Icons.search,size: 24.h,),text: AppStrings.searchText,),
     Tab(icon: Icon(Icons.bookmark), text: AppStrings.bookMarkText),
   ];
 
@@ -71,26 +73,27 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             TabBarView(
               physics: const NeverScrollableScrollPhysics(),
               controller: _tabController,
-              children: [TrendingScreen(), BookMarkScreen()],
+              children: [TrendingScreen(), SearchScreen(),BookMarkScreen()],
             ),
-            Positioned(
-              bottom: kToolbarHeight/5,
-              right: 10.w,
-              child: InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.searchScreen);
-                },
-                child: Container(
-                  height: 50.h,
-                  width: 50.h,
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryColor,
-                    borderRadius: BorderRadius.circular(50.r),
-                  ),
-                  child: Icon(Icons.search, size: 24.h,color: Colors.white),
-                ),
-              ),
-            ),
+            // Positioned(
+            //   bottom: kToolbarHeight/5,
+            //   right: 10.w,
+            //   child: InkWell(
+            //     onTap: () {
+            //       Navigator.pushNamed(context, AppRoutes.searchScreen);
+            //     },
+            //     child: Container(
+            //       height: 50.h,
+            //       width: 50.h,
+            //       decoration: BoxDecoration(
+            //         color: AppColors.primaryColor,
+            //         borderRadius: BorderRadius.circular(50.r),
+            //       ),
+            //       child: Icon(Icons.search, size: 24.h,color: Colors.white),
+            //     ),
+            //   ),
+            // ),
+
           ],
         ),
       ),

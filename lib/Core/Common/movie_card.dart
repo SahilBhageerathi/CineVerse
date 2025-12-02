@@ -48,8 +48,11 @@ class _MovieCardState extends State<MovieCard> {
                     CachedNetworkImage(
                       imageUrl: "${GlobalConstant.imageUrl}${widget.movie!.posterPath}",
                       fit: BoxFit.cover,
-                      placeholder: (_, __) =>  Center(child: CircularProgressIndicator(color: AppColors.primaryColor,)),
-                      errorWidget: (_, __, ___) => const Icon(Icons.broken_image),
+                      placeholder: (_, __) =>  Container(
+                        width: double.infinity,
+                        color: Colors.grey,
+                      ),
+                      errorWidget: (_, __, ___) => const Icon(Icons.broken_image,color: Colors.blue),
                     ),
                     widget.movie != null
                         ? Positioned(
@@ -68,7 +71,7 @@ class _MovieCardState extends State<MovieCard> {
                               ),
                             ),
                           )
-                        : 0.hs,
+                        : SizedBox.shrink(),
 
                     Align(
                       alignment: Alignment.bottomCenter,
@@ -91,7 +94,7 @@ class _MovieCardState extends State<MovieCard> {
                   ],
                 ),
               )
-            : 0.hs,
+            : SizedBox.shrink(),
       ),
     );
   }

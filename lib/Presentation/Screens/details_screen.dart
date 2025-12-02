@@ -106,7 +106,7 @@ class _MovieDetailsScreenState1 extends State<MovieDetailsScreen> with TickerPro
                     ],
                   ),
             body: currentMovie == null
-                ? 0.hs
+                ? SizedBox.shrink()
                 : SingleChildScrollView(
                     child: Column(
                       children: [

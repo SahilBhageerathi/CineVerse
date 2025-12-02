@@ -7,7 +7,7 @@ class AppStrings{
   static const String trendingText = "Popular";
   static const String nowPlayingText = "Now Playing";
   static const String welcomeText = "Welcome to CineVerse";
-  static const String sampleMoviePlotText = "Evil Dead is a 2013 American supernatural horror film directed by Fede Álvarez who co-wrote the screenplay with Rodo Sayagues. Dubbed a 're-imagining' of";
+  static const String bookMarkPagePlaceHolder = "No BookMarks Found";
 
   ///api strings
   static const String baseUrl = "BASE_URL";
