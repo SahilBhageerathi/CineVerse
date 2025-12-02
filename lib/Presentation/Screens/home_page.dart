@@ -19,13 +19,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late TabController _tabController;
 
   final List<Tab> tabs = [
-    Tab(icon: Icon(Icons.home), text: AppStrings.trendingText),
+    Tab(icon: Icon(Icons.home), text: AppStrings.homeText),
     Tab(icon: Icon(Icons.bookmark), text: AppStrings.bookMarkText),
   ];
 
   @override
   void initState() {
     super.initState();
+    context.read<HomeBloc>().add(InitializeHomePage());
     _tabController = TabController(length: tabs.length, vsync: this);
   }
 
@@ -37,60 +38,57 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<HomeBloc, HomeState>(
-      builder: (context, state) {
-        return Scaffold(
-          body: Padding(
-            padding: EdgeInsets.only(
-              top: kToolbarHeight / 2,
-              left: AppDimensions.paddingSmall,
-              right: AppDimensions.paddingSmall,
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.only(
+          top: kToolbarHeight / 2,
+          left: AppDimensions.padding8,
+          right: AppDimensions.padding8,
+        ),
+        child: Stack(
+          children: [
+            TabBarView(
+              physics: const NeverScrollableScrollPhysics(),
+              controller: _tabController,
+              children: [TrendingScreen(), BookMarkScreen()],
             ),
-            child: Stack(
-              children: [
-                TabBarView(
-                  controller: _tabController,
-                  children: const [TrendingScreen(), BookMarkScreen()],
-                ),
-                Positioned(
-                  bottom: kToolbarHeight,
-                  right: 10.w,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.searchScreen);
-                    },
-                    child: Container(
-                      height: 50.h,
-                      width: 50.h,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(50.r),
-                      ),
-                      child: Icon(Icons.search, size: 24.h),
-                    ),
+            Positioned(
+              bottom: kToolbarHeight,
+              right: 10.w,
+              child: InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.searchScreen);
+                },
+                child: Container(
+                  height: 50.h,
+                  width: 50.h,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(50.r),
                   ),
-                ),
-              ],
-            ),
-          ),
-          bottomNavigationBar: SizedBox(
-            height: 60.h,
-            child: Material(
-              color: Colors.white,
-              child: TabBar(
-                controller: _tabController,
-                tabs: tabs,
-                labelColor: Colors.black,
-                unselectedLabelColor: Colors.grey,
-                indicator: UnderlineTabIndicator(
-                  borderSide: const BorderSide(width: 3, color: Colors.black),
-                  insets: EdgeInsets.fromLTRB(0, 0, 0, 60.h),
+                  child: Icon(Icons.search, size: 24.h),
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: SizedBox(
+        height: 60.h,
+        child: Material(
+          color: Colors.white,
+          child: TabBar(
+            controller: _tabController,
+            tabs: tabs,
+            labelColor: Colors.black,
+            unselectedLabelColor: Colors.grey,
+            indicator: UnderlineTabIndicator(
+              borderSide: const BorderSide(width: 3, color: Colors.black),
+              insets: EdgeInsets.fromLTRB(0, 0, 0, 60.h),
+            ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

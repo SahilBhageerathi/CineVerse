@@ -1,13 +1,31 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:inshorts_task/Core/Contants/app_strings.dart';
 import 'package:inshorts_task/Core/Contants/global.dart';
+import 'package:inshorts_task/data/local/movie_entity.dart';
+import 'package:inshorts_task/di/injector.dart';
 import 'Core/Contants/app_routes.dart';
 import 'Presentation/Bloc/Home/home_bloc.dart';
 import 'Presentation/Screens/splash_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(MovieEntityAdapter());
+await Hive.openBox<MovieEntity>(GlobalConstant.moviesBox);
+await Hive.openBox<List<int>>(GlobalConstant.popularIdsBox);
+await Hive.openBox<List<int>>(GlobalConstant.nowPlayingIdsBox);
+
+
+  HttpOverrides.global = MyHttpOverrides();
+  await initDependencies();
   runApp(const MyApp());
 }
 
@@ -18,7 +36,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(360, 690),
-      child: BlocProvider(
+      child:BlocProvider(
         create: (context) => HomeBloc(),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -30,5 +48,13 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
