@@ -62,6 +62,8 @@ However, for Android to allow deep links from the browser or shared links automa
 
 App Info -> Open by default -> Add Link -> Allow "www.cineverse.com"
 
+https://github.com/user-attachments/assets/34fefdd0-3b73-41e2-915f-834ceac694b1
+
 
 
 
