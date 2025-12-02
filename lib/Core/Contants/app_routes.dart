@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:inshorts_task/Presentation/Screens/book_mark_screen.dart';
+import 'package:inshorts_task/Presentation/Screens/details_screen.dart';
 import 'package:inshorts_task/Presentation/Screens/home_page.dart';
-import 'package:inshorts_task/Presentation/Screens/movie_details_screen.dart';
 import 'package:inshorts_task/Presentation/Screens/search_screen.dart';
 import 'package:inshorts_task/Presentation/Screens/splash_screen.dart';
 import 'package:inshorts_task/Presentation/Screens/trending_screen.dart';
+import 'package:inshorts_task/data/model/movie.dart';
 
 class AppRoutes{
   static const String splashScreen = '/';
@@ -27,23 +28,24 @@ class AppRoutes{
         );
 
       case homeScreen:
-        return _buildPageRoute(const HomeScreen(), routeSettings);
+        return buildPageRoute(const HomeScreen(), routeSettings);
 
       case bookMarkScreen:
-        return _buildPageRoute(const BookMarkScreen(), routeSettings);
+        return buildPageRoute(const BookMarkScreen(), routeSettings);
 
       case trendingScreen:
-        return _buildPageRoute(const TrendingScreen(), routeSettings);
+        return buildPageRoute(const TrendingScreen(), routeSettings);
 
       case searchScreen:
-        return _buildPageRoute(const SearchScreen(), routeSettings);
+        return buildPageRoute(const SearchScreen(), routeSettings);
 
       case movieDetailsScreen:
-        return _buildPageRoute(const MovieDetailsScreen(), routeSettings);
+        final movie = routeSettings.arguments as Movie;
+        return buildPageRoute( MovieDetailsScreen(movie: movie), routeSettings);
     }
   }
 
-  static PageRouteBuilder _buildPageRoute(Widget screen, RouteSettings settings) {
+  static PageRouteBuilder buildPageRoute(Widget screen, RouteSettings settings) {
     return PageRouteBuilder(
       settings: settings,
       transitionDuration: const Duration(milliseconds: 400),
