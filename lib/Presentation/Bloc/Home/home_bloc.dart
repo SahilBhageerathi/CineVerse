@@ -22,6 +22,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<ShareMovieEvent>(onShareMovie);
     on<GetMovieEvent>(getMovie);
     on<OpenDetailsPageFromDeepLink>(openViaDeepLink);
+    on<RefreshHomePage>(refreshHomePage);
   }
 
   FutureOr<void> initialize(InitializeHomePage event, Emitter<HomeState> emit) async {
@@ -177,5 +178,49 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   FutureOr<void> openViaDeepLink(OpenDetailsPageFromDeepLink event, Emitter<HomeState> emit) {
     emit(state.copyWith(comingBackFromDetailsPage:event.val));
+  }
+
+  FutureOr<void> refreshHomePage(RefreshHomePage event, Emitter<HomeState> emit)async {
+    emit(state.copyWith(isLoading: true));
+    try {
+      if(state.currentPopularPage>3){
+        state.currentPopularPage=0;
+      }
+      if(state.currentNowPlayingPage>3){
+        state.currentNowPlayingPage=0;
+      }
+
+      int page1 = state.currentPopularPage + 1;
+      int page2 = state.currentNowPlayingPage + 1;
+      final trendingResp = await movieRepo.fetchTrendingMovies(page1);
+      final nowPlayingResp = await movieRepo.fetchNowPlayingMovies(page2);
+
+      final mergedMovies = <int, Movie>{};
+
+      for (var m in trendingResp.results) {
+        mergedMovies[m.id] = m;
+      }
+
+      for (var m in nowPlayingResp.results) {
+        mergedMovies[m.id] = m;
+      }
+
+      await movieRepo.saveMoviesDb(mergedMovies);
+      await movieRepo.saveTrendingIds(trendingResp.results.map((e) => e.id).toList());
+      await movieRepo.saveNowPlayingIds(nowPlayingResp.results.map((e) => e.id).toList());
+
+      emit(
+        state.copyWith(
+          isLoading: false,
+          currentPopularPage: page1,
+          currentNowPlayingPage: page2,
+          allMovies: mergedMovies.values.toList(),
+          trendingMovieIds: trendingResp.results.map((e) => e.id).toList(),
+          nowPlayingMovieIds: nowPlayingResp.results.map((e) => e.id).toList(),
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(isLoading: false),);
+    }
   }
 }

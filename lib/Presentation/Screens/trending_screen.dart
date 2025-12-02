@@ -71,38 +71,44 @@ class _TrendingScreenState extends State<TrendingScreen> with TickerProviderStat
   }
 
   Widget createMovieGrid(List<Movie> movies, BuildContext context, {required bool isTrending}) {
-    return NotificationListener<ScrollNotification>(
-      onNotification: (scrollInfo) {
-        if (scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 200) {
-          context.read<HomeBloc>().add(
-            isTrending ? LoadMorePopular() : LoadMoreNowPlaying(),
-          );
-        }
-        return false;
+    return RefreshIndicator(
+      onRefresh: () async {
+        context.read<HomeBloc>().add(InitializeHomePage());
+        await Future.delayed(const Duration(seconds: 1));
       },
-      child: GridView.builder(
-        padding: const EdgeInsets.all(AppDimensions.padding8),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-        ),
-        itemCount: movies.length,
-        itemBuilder: (context, index) {
-          return MovieCard(
-            movie: movies[index],
-            onTapOfMovieCard: () {
-              Navigator.pushNamed(
-                context,
-                AppRoutes.movieDetailsScreen,
-                arguments: movies[index],
-              );
-            },
-            onTapBookmark: () {
-              context.read<HomeBloc>().add(ToggleBookmark(movies[index].id));
-            },
-          );
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (scrollInfo) {
+          if (scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent - 200) {
+            context.read<HomeBloc>().add(
+              isTrending ? LoadMorePopular() : LoadMoreNowPlaying(),
+            );
+          }
+          return false;
         },
+        child: GridView.builder(
+          padding: const EdgeInsets.all(AppDimensions.padding8),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+          ),
+          itemCount: movies.length,
+          itemBuilder: (context, index) {
+            return MovieCard(
+              movie: movies[index],
+              onTapOfMovieCard: () {
+                Navigator.pushNamed(
+                  context,
+                  AppRoutes.movieDetailsScreen,
+                  arguments: movies[index],
+                );
+              },
+              onTapBookmark: () {
+                context.read<HomeBloc>().add(ToggleBookmark(movies[index].id));
+              },
+            );
+          },
+        ),
       ),
     );
   }

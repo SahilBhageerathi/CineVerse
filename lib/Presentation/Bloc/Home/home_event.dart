@@ -6,6 +6,8 @@ abstract class HomeEvent {}
 
 class InitializeHomePage extends HomeEvent{}
 
+class RefreshHomePage extends HomeEvent{}
+
 class LoadMorePopular extends HomeEvent {}
 
 class LoadMoreNowPlaying extends HomeEvent {}
