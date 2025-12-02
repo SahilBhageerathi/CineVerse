@@ -67,4 +67,13 @@ class MovieRepository {
     movies.sort((a, b) => b.voteAverage.compareTo(a.voteAverage));
     return movies;
   }
+
+  Movie? getMovieById(int id) {
+    for (var m in movieBox.values) {
+       if(m.id == id){
+         return m.toModel();
+       }
+    }
+    return null;
+  }
 }

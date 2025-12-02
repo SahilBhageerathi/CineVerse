@@ -19,18 +19,23 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController searchController = TextEditingController();
+  final FocusNode searchFocus = FocusNode();
   Timer? debounce;
 
   @override
   void initState() {
     super.initState();
     context.read<HomeBloc>().add(InitializeSearchPage());
+    Future.delayed(Duration(milliseconds: 100), () {
+      searchFocus.requestFocus();
+    });
   }
 
   @override
   void dispose() {
     debounce?.cancel();
     searchController.dispose();
+    searchFocus.dispose();
     super.dispose();
   }
 
@@ -69,6 +74,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
                 child: TextField(
                   controller: searchController,
+                  focusNode: searchFocus,
                   onChanged: onSearchChanged,
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(

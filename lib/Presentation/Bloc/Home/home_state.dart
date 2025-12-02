@@ -14,6 +14,9 @@ class HomeState {
   List<int> trendingMovieIds=[];
   List<int> nowPlayingMovieIds=[];
   List<Movie> searchMovieResults = [];
+  Movie? movieFromDeepLink;
+  bool openedFromDeepLink=false;
+  bool comingBackFromDetailsPage=false;
 
   HomeState copyWith({
     bool? isLoading,
@@ -29,6 +32,8 @@ class HomeState {
 
     bool? isLoadingMore,
     int? currentPage,
+    Movie? movieFromDeepLink,
+    bool? comingBackFromDetailsPage,
   }) {
     HomeState newState = HomeState();
     newState.isLoading = isLoading ?? this.isLoading;
@@ -44,6 +49,8 @@ class HomeState {
 
     newState.isLoadingMore = isLoadingMore ?? this.isLoadingMore;
     newState.currentPage = currentPage ?? this.currentPage;
+    newState.movieFromDeepLink = movieFromDeepLink ?? this.movieFromDeepLink;
+    newState.comingBackFromDetailsPage = comingBackFromDetailsPage ?? this.comingBackFromDetailsPage;
     return newState;
   }
 }

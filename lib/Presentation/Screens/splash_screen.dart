@@ -1,8 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:inshorts_task/Core/Contants/app_dimensions.dart';
 import 'package:inshorts_task/Core/Contants/app_routes.dart';
 import 'package:inshorts_task/Core/Contants/app_strings.dart';
+import 'package:inshorts_task/resources/colors/app_colors.dart';
+import 'package:inshorts_task/resources/images/svg_images.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -32,15 +37,17 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primaryColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // SvgPicture.asset(SvgImages.logo,
-            //       width: SplashScreen.splashIconSize.h, height: SplashScreen.splashIconSize.h),
-            Text(AppStrings.welcomeText, style: Theme.of(context).textTheme.headlineMedium),
+
+            Text(AppStrings.welcomeText, style: TextStyle(color: Colors.white,fontSize: 24.h),),
             const SizedBox(height: 20),
-            const CircularProgressIndicator(),
+            SvgPicture.asset(SvgImages.logo,
+                width: AppDimensions.splashIconSize.h,
+                height: AppDimensions.splashIconSize.h),
           ],
         ),
       ),

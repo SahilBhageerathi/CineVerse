@@ -40,8 +40,14 @@ class AppRoutes{
         return buildPageRoute(const SearchScreen(), routeSettings);
 
       case movieDetailsScreen:
-        final movie = routeSettings.arguments as Movie;
-        return buildPageRoute( MovieDetailsScreen(movie: movie), routeSettings);
+        if (routeSettings.arguments is int) {
+          final movieId = routeSettings.arguments as int;
+          return buildPageRoute(MovieDetailsScreen(movieId: movieId), routeSettings);
+        } else if (routeSettings.arguments is Movie) {
+          final movie = routeSettings.arguments as Movie;
+          return buildPageRoute(MovieDetailsScreen(movie: movie), routeSettings);
+        }
+        return null;
     }
   }
 

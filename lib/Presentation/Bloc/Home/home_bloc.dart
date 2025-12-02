@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:inshorts_task/data/model/movie.dart';
 import 'package:inshorts_task/data/repository/movie_repository.dart';
 import 'package:inshorts_task/di/injector.dart';
+import 'package:share_plus/share_plus.dart';
 
 part 'home_event.dart';
 
@@ -18,6 +19,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<ToggleBookmark>(onToggleBookmark);
     on<InitializeSearchPage>(initSearchPage);
     on<OnSearchChanged>(onSearchChanged);
+    on<ShareMovieEvent>(onShareMovie);
+    on<GetMovieEvent>(getMovie);
+    on<OpenDetailsPageFromDeepLink>(openViaDeepLink);
   }
 
   FutureOr<void> initialize(InitializeHomePage event, Emitter<HomeState> emit) async {
@@ -158,5 +162,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   FutureOr<void> initSearchPage(InitializeSearchPage event, Emitter<HomeState> emit) {
     state.searchMovieResults = [];
     emit(state.copyWith(searchMovieResults: []));
+  }
+
+  FutureOr<void> onShareMovie(ShareMovieEvent event, Emitter<HomeState> emit) {
+    SharePlus.instance.share(
+        ShareParams(text: event.url)
+    );
+  }
+
+  FutureOr<Movie?> getMovie(GetMovieEvent event, Emitter<HomeState> emit) {
+    Movie? x= movieRepo.getMovieById(event.id);
+    emit(state.copyWith(movieFromDeepLink: x));
+  }
+
+  FutureOr<void> openViaDeepLink(OpenDetailsPageFromDeepLink event, Emitter<HomeState> emit) {
+    emit(state.copyWith(comingBackFromDetailsPage:event.val));
   }
 }

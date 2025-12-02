@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -13,6 +14,8 @@ import 'Core/Contants/app_routes.dart';
 import 'Presentation/Bloc/Home/home_bloc.dart';
 import 'Presentation/Screens/splash_screen.dart';
 
+late final AppLinks _appLinks;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
@@ -23,6 +26,20 @@ await Hive.openBox<MovieEntity>(GlobalConstant.moviesBox);
 await Hive.openBox<List<int>>(GlobalConstant.popularIdsBox);
 await Hive.openBox<List<int>>(GlobalConstant.nowPlayingIdsBox);
 
+  _appLinks = AppLinks();
+  _appLinks.uriLinkStream.listen((uri) {
+    if (uri.host == "www.cineverse.com" && uri.pathSegments.isNotEmpty) {
+      if (uri.pathSegments.first == "movie") {
+        final movieId = int.tryParse(uri.queryParameters["id"] ?? "");
+        if (movieId != null) {
+          GlobalConstant.navigatorKey.currentState?.pushReplacementNamed(
+            AppRoutes.movieDetailsScreen,
+            arguments: movieId,
+          );
+        }
+      }
+    }
+  });
 
   HttpOverrides.global = MyHttpOverrides();
   await initDependencies();
