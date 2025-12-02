@@ -7,6 +7,7 @@ import 'package:inshorts_task/Core/Contants/app_strings.dart';
 import 'package:inshorts_task/Presentation/Bloc/Home/home_bloc.dart';
 import 'package:inshorts_task/Presentation/Screens/book_mark_screen.dart';
 import 'package:inshorts_task/Presentation/Screens/trending_screen.dart';
+import 'package:inshorts_task/resources/colors/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -53,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               children: [TrendingScreen(), BookMarkScreen()],
             ),
             Positioned(
-              bottom: kToolbarHeight,
+              bottom: kToolbarHeight/5,
               right: 10.w,
               child: InkWell(
                 onTap: () {
@@ -63,10 +64,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   height: 50.h,
                   width: 50.h,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.primaryColor,
                     borderRadius: BorderRadius.circular(50.r),
                   ),
-                  child: Icon(Icons.search, size: 24.h),
+                  child: Icon(Icons.search, size: 24.h,color: Colors.white),
                 ),
               ),
             ),
