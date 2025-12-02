@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inshorts_task/Core/Contants/app_dimensions.dart';
 import 'package:inshorts_task/Core/Contants/app_strings.dart';
 import 'package:inshorts_task/Core/Contants/global.dart';
+import 'package:inshorts_task/Presentation/Bloc/Home/home_bloc.dart';
 import 'package:inshorts_task/Utils/extensions.dart';
 import 'package:inshorts_task/data/model/movie.dart';
 
@@ -52,6 +54,7 @@ class _MovieDetailsScreenState1 extends State<MovieDetailsScreen> with TickerPro
           IconButton(
             onPressed: () {
               setState(() => widget.movie.isBookmarked = !widget.movie.isBookmarked);
+              context.read<HomeBloc>().add(ToggleBookmark(widget.movie.id));
             },
             icon: Icon(
               widget.movie.isBookmarked ? Icons.bookmark : Icons.bookmark_border,
