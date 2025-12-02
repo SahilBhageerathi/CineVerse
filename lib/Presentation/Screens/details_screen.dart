@@ -23,13 +23,19 @@ class MovieDetailsScreen extends StatefulWidget {
 
 class _MovieDetailsScreenState1 extends State<MovieDetailsScreen> with TickerProviderStateMixin {
   late TabController _tabController;
-  Movie? m;
+  Movie? currentMovie;
+  bool isBookMarked=false;
 
   @override
   void initState() {
     super.initState();
     if (widget.movie == null && widget.movieId != null) {
-      context.read<HomeBloc>().add(GetMovieEvent(widget.movieId!));
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<HomeBloc>().add(GetMovieEvent(widget.movieId!));
+      });
+      isBookMarked=context.read<HomeBloc>().state.movieFromDeepLink?.isBookmarked ?? false;
+    }else{
+      isBookMarked=widget.movie!.isBookmarked;
     }
     _tabController = TabController(length: 3, vsync: this);
   }
@@ -44,7 +50,7 @@ class _MovieDetailsScreenState1 extends State<MovieDetailsScreen> with TickerPro
   Widget build(BuildContext context) {
     return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
-        m = widget.movie ?? state.movieFromDeepLink;
+        currentMovie = widget.movie ?? state.movieFromDeepLink;
         return WillPopScope(
           onWillPop: () async {
             if (state.movieFromDeepLink != null) {
@@ -60,9 +66,9 @@ class _MovieDetailsScreenState1 extends State<MovieDetailsScreen> with TickerPro
             }
           },
           child: Scaffold(
-            backgroundColor: m == null ? Colors.white : const Color(0xff1A1C22),
+            backgroundColor: currentMovie == null ? Colors.white : const Color(0xff1A1C22),
             extendBodyBehindAppBar: true,
-            appBar: m == null
+            appBar: currentMovie == null
                 ? AppBar(automaticallyImplyLeading: false)
                 : AppBar(
                     backgroundColor: Colors.transparent,
@@ -89,17 +95,17 @@ class _MovieDetailsScreenState1 extends State<MovieDetailsScreen> with TickerPro
                     actions: [
                       IconButton(
                         onPressed: () {
-                          setState(() => m!.isBookmarked = m!.isBookmarked);
-                          context.read<HomeBloc>().add(ToggleBookmark(m!.id));
+                          context.read<HomeBloc>().add(ToggleBookmark(currentMovie!.id));
+                          setState(() => isBookMarked = !isBookMarked);
                         },
                         icon: Icon(
-                          m!.isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                          isBookMarked ? Icons.bookmark : Icons.bookmark_border,
                           color: Colors.white,
                         ),
                       ),
                     ],
                   ),
-            body: m == null
+            body: currentMovie == null
                 ? 0.hs
                 : SingleChildScrollView(
                     child: Column(
@@ -108,7 +114,7 @@ class _MovieDetailsScreenState1 extends State<MovieDetailsScreen> with TickerPro
                           height: 300.h,
                           width: double.infinity,
                           child: CachedNetworkImage(
-                            imageUrl: "${GlobalConstant.imageUrl}${m!.backdropPath}",
+                            imageUrl: "${GlobalConstant.imageUrl}${currentMovie!.backdropPath}",
                             fit: BoxFit.scaleDown,
                             placeholder: (_, __) => const Center(child: CircularProgressIndicator()),
                             errorWidget: (_, __, ___) => const Icon(Icons.error),
@@ -125,7 +131,7 @@ class _MovieDetailsScreenState1 extends State<MovieDetailsScreen> with TickerPro
                                 width: 85.w,
                                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.r)),
                                 child: CachedNetworkImage(
-                                  imageUrl: "${GlobalConstant.imageUrl}${m!.posterPath}",
+                                  imageUrl: "${GlobalConstant.imageUrl}${currentMovie!.posterPath}",
                                   fit: BoxFit.scaleDown,
                                   placeholder: (_, __) =>
                                       const Center(child: CircularProgressIndicator()),
@@ -138,7 +144,7 @@ class _MovieDetailsScreenState1 extends State<MovieDetailsScreen> with TickerPro
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      m!.title,
+                                      currentMovie!.title,
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 22.sp,
@@ -151,7 +157,7 @@ class _MovieDetailsScreenState1 extends State<MovieDetailsScreen> with TickerPro
                                         const Icon(Icons.star, color: Colors.amber, size: 20),
                                         4.ws,
                                         Text(
-                                          m!.voteAverage.toString(),
+                                          currentMovie!.voteAverage.toString(),
                                           style: TextStyle(color: Colors.white, fontSize: 16.sp),
                                         ),
                                       ],
@@ -166,11 +172,11 @@ class _MovieDetailsScreenState1 extends State<MovieDetailsScreen> with TickerPro
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            customIcon(Icons.date_range, m!.releaseDate ?? "N/A"),
+                            customIcon(Icons.date_range, currentMovie!.releaseDate ?? "N/A"),
                             separatorDot(),
-                            customIcon(Icons.favorite, m!.popularity.toString()),
+                            customIcon(Icons.favorite, currentMovie!.popularity.toString()),
                             separatorDot(),
-                            customIcon(Icons.movie_filter, m!.genreNames.join(", ")),
+                            customIcon(Icons.movie_filter, currentMovie!.genreNames.join(", ")),
                           ],
                         ),
                         20.hs,
@@ -200,7 +206,7 @@ class _MovieDetailsScreenState1 extends State<MovieDetailsScreen> with TickerPro
                                   vertical: AppDimensions.padding16.h,
                                 ),
                                 child: Text(
-                                  m!.overview,
+                                  currentMovie!.overview,
                                   style: TextStyle(
                                     color: Colors.white70,
                                     fontSize: 16.sp,
@@ -230,8 +236,8 @@ class _MovieDetailsScreenState1 extends State<MovieDetailsScreen> with TickerPro
                   ),
             floatingActionButton: InkWell(
               onTap: () {
-                final movieId = m!.id;
-                final title = m!.title;
+                final movieId = currentMovie!.id;
+                final title = currentMovie!.title;
                 final link = "https://www.cineverse.com/movie?id=$movieId";
                 context.read<HomeBloc>().add(
                   ShareMovieEvent("Check out this movie \n$title\n$link"),
