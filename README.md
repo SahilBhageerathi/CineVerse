@@ -15,7 +15,7 @@ The app supports Trending & Now Playing movie feeds, search, bookmarking, and mo
 | Offline Caching (Hive)                 | ✔️     |
 | Bookmarks                              | ✔️     |
 | Smooth Navigation & Custom Transitions | ✔️     |
-| Responsive UI using ScreenUtil         | ✔️     |
+| User can Share and view using a link   | ✔️     |
 
 
 
